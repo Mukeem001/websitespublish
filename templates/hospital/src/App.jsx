@@ -10,7 +10,7 @@ import Login from './Pages/Login';
 
 import Navbar from './componenet/Navbar';
 import Footer from './componenet/Footer';
-import Explorenow from "./Pages/Explorenow";
+import Explorenow from './Pages/Explorenow';
 import Address from './Pages/Address';
 import Payment from './Pages/Payment';
 import OrderComplete from './Pages/Ordercomplete';

@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import Wishlist from "./pages/Wishlist";
-import Profile from "./pages/Profile";
+import Home from "./Pages/Home";
+import Products from "./Pages/Products";
+import Wishlist from "./Pages/Wishlist";
+import Profile from "./Pages/Profile";
 import Cart from "./Pages/Cart";
 import Login from "./Pages/Login";
 import Navbar from "./Components/Navbar";
@@ -16,7 +16,7 @@ import Address from "./Pages/Address";
 import Payment from "./Pages/Payment";
 import OrderSuccess from "./Pages/Order-success";
 import Trackorder from "./Pages/Trackorder";
-import ForgetPassword from "./Pages/ForgetPassword";
+import ForgetPassword from "./Pages/Forgetpassword";
 
 
 
