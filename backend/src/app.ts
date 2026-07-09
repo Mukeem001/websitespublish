@@ -16,6 +16,8 @@ import pageRoutes from "./routes/page.routes";
 import websiteServerRoutes from "./website-server/website.routes";
 import superAdminRoutes from "./super-admin/super-admin.routes";
 import domainRoutes from "./domain/domain.routes";
+import Domain from "./domain/domain.model";
+import Website from "./models/Website";
 
 
 const app = express();
@@ -102,7 +104,47 @@ app.use("/api/pages", pageRoutes);
 app.use("/sites", websiteServerRoutes);
 app.use("/api/domain", domainRoutes); 
 
+/* ===========================
+   Custom domain routing
+=========================== */
 
+app.use(async (req, res, next) => {
+  const path = req.path;
+
+  if (
+    path.startsWith("/api") ||
+    path.startsWith("/sites") ||
+    path.startsWith("/favicon")
+  ) {
+    return next();
+  }
+
+  const hostname = req.hostname?.toLowerCase();
+
+  if (!hostname) {
+    return next();
+  }
+
+  const domainRecord = await Domain.findOne({
+    domain: hostname,
+    verificationStatus: "verified",
+  });
+
+  if (!domainRecord) {
+    return next();
+  }
+
+  const website = await Website.findById(
+    domainRecord.websiteId
+  );
+
+  if (!website || !website.isPublished) {
+    return next();
+  }
+
+  req.url = `/sites/${website.slug}${req.url}`;
+  next();
+});
 
 /* ===========================
    404
