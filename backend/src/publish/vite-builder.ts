@@ -9,15 +9,11 @@ import path from "path";
 export const installDependencies = async (
   projectPath: string
 ) => {
-  try {
-    await execa("npm", ["install"], {
-      cwd: projectPath,
-      stdio: "inherit",
-      shell: true,
-    });
-  } catch (error) {
-    console.warn("npm install failed during publish:", error);
-  }
+  await execa("npm", ["install"], {
+    cwd: projectPath,
+    stdio: "inherit",
+    shell: true,
+  });
 };
 
 /* ==========================
@@ -27,15 +23,11 @@ export const installDependencies = async (
 export const buildProject = async (
   projectPath: string
 ) => {
-  try {
-    await execa("npm", ["run", "build"], {
-      cwd: projectPath,
-      stdio: "inherit",
-      shell: true,
-    });
-  } catch (error) {
-    console.warn("vite build failed during publish:", error);
-  }
+  await execa("npm", ["run", "build"], {
+    cwd: projectPath,
+    stdio: "inherit",
+    shell: true,
+  });
 };
 
 /* ==========================

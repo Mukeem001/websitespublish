@@ -1,3 +1,6 @@
+import fs from "fs-extra";
+import path from "path";
+
 import Website from "../models/Website";
 import WebsiteSettings from "../models/WebsiteSettings";
 import WebsiteTheme from "../models/WebsiteTheme";
@@ -94,13 +97,21 @@ export const publishWebsite = async (
      Build Project
   ========================= */
 
-  try {
-    await installAndBuild(
-      projectPath,
-      website.slug
+  await installAndBuild(
+    projectPath,
+    website.slug
+  );
+
+  const builtIndex = path.join(
+    projectPath,
+    "dist",
+    "index.html"
+  );
+
+  if (!(await fs.pathExists(builtIndex))) {
+    throw new Error(
+      "Publish failed: built site output not found."
     );
-  } catch (error) {
-    console.warn("Publish build step failed, continuing with copied template:", error);
   }
 
   /* =========================

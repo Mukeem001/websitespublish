@@ -7,10 +7,9 @@ export const TEMPLATES_DIR = path.join(
   "templates"
 ); // root-level templates folder under websites-builder
 
-export const PUBLISHED_DIR = path.join(
-  ROOT_DIR,
-  "published"
-);
+export const PUBLISHED_DIR = process.env.PUBLISH_ROOT
+  ? path.resolve(process.env.PUBLISH_ROOT)
+  : path.join(ROOT_DIR, "published");
 
 export const UPLOADS_DIR = path.join(
   ROOT_DIR,
