@@ -6,6 +6,14 @@ import {
   publishWebsite,
   verifyDomain,
 } from "../services/publish.service";
+
+const API_ORIGIN = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "")
+  : "http://localhost:5000";
+
+const DEFAULT_CUSTOM_DOMAIN_TARGET =
+  import.meta.env.VITE_CUSTOM_DOMAIN_TARGET ||
+  API_ORIGIN.replace(/^https?:\/\//, "");
 import type {
   DomainType,
   PublishStep,
@@ -58,7 +66,7 @@ export const usePublish = (
     useState("www");
 
   const [dnsTarget, setDnsTarget] =
-    useState("builder.buildhub.app");
+    useState(DEFAULT_CUSTOM_DOMAIN_TARGET);
 
   const [
     createAdminPanel,
@@ -98,7 +106,7 @@ export const usePublish = (
     setCustomDomainConnected(false);
     setWebsiteId(undefined);
     setDnsHost("www");
-    setDnsTarget("builder.buildhub.app");
+    setDnsTarget(DEFAULT_CUSTOM_DOMAIN_TARGET);
     setCreateAdminPanel(true);
     setEnableSSL(true);
     setWebsiteUrl("");
@@ -233,7 +241,7 @@ export const usePublish = (
         websiteId: currentWebsiteId,
         customDomain,
         dnsHost,
-        dnsTarget,
+        dnsTarget: dnsTarget || DEFAULT_CUSTOM_DOMAIN_TARGET,
       });
 
       setCustomDomainConnected(true);

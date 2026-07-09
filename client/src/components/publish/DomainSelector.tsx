@@ -40,6 +40,17 @@ const DomainSelector = ({
   const domainRegex =
     /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
+  const fallbackTarget =
+    import.meta.env.VITE_CUSTOM_DOMAIN_TARGET ||
+    (import.meta.env.VITE_API_URL
+      ? import.meta.env.VITE_API_URL
+          .replace(/\/api\/?$/, "")
+          .replace(/^https?:\/\//, "")
+      : "your-domain-target.com");
+
+  const previewTarget =
+    dnsTarget || fallbackTarget;
+
   const isValidCustomDomain =
     customDomain.length === 0
       ? false
@@ -303,9 +314,14 @@ const DomainSelector = ({
                 <p className="text-sm text-slate-500">
                   DNS Preview
                 </p>
-                <h4 className="font-bold text-white">
-                  {dnsHost}. {dnsTarget}
-                </h4>
+                <div className="space-y-1">
+                  <p className="text-sm text-slate-400">
+                    Host: {dnsPreviewHost}
+                  </p>
+                  <p className="text-sm text-slate-400">
+                    Target: {activeTarget}
+                  </p>
+                </div>
               </div>
 
               <div className="mt-6 rounded-2xl border border-slate-700 bg-slate-950 p-5">
@@ -325,7 +341,7 @@ const DomainSelector = ({
                     <strong>Host:</strong> {dnsHost || "www"}
                   </li>
                   <li>
-                    <strong>Value / Target:</strong> {dnsTarget || "builder.buildhub.app"}
+                    <strong>Value / Target:</strong> {activeTarget}
                   </li>
                   <li>
                     <strong>TTL:</strong> use default or 1 hour
