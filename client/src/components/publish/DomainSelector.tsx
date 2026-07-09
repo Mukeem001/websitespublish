@@ -47,9 +47,16 @@ const DomainSelector = ({
           .replace(/\/api\/?$/, "")
           .replace(/^https?:\/\//, "")
       : "your-domain-target.com");
+  const defaultTarget = fallbackTarget;
 
-  const previewTarget =
-    dnsTarget || fallbackTarget;
+  const activeTarget =
+    dnsTarget || defaultTarget;
+
+  const dnsPreviewHost =
+    dnsHost?.trim() === "@" ||
+    dnsHost?.trim() === ""
+      ? "@"
+      : dnsHost;
 
   const isValidCustomDomain =
     customDomain.length === 0
