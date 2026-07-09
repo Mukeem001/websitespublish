@@ -151,8 +151,13 @@ export const usePublish = (
         );
       }
 
-      const result = await publishWebsite(payload);
+        const result = await publishWebsite(payload);
       const publishedWebsite: any = result.website;
+
+      const apiOrigin =
+        import.meta.env.VITE_API_URL
+          ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "")
+          : "http://localhost:5000";
 
       const isDevelopment =
         window.location.hostname === "localhost";
@@ -160,16 +165,14 @@ export const usePublish = (
       const website =
         isDevelopment
           ? `http://localhost:5000/sites/${publishedWebsite.slug}`
-          : domainType === "subdomain"
-          ? `https://${publishedWebsite.slug}.buildhub.app`
-          : `https://${customDomain}`;
+          : domainType === "custom"
+          ? `https://${customDomain}`
+          : `${apiOrigin}/sites/${publishedWebsite.slug}`;
 
       const admin =
         isDevelopment
           ? `http://localhost:5173/dashboard/${result.website._id}`
-          : domainType === "subdomain"
-          ? `https://${result.website.slug}.buildhub.app/admin`
-          : `https://${customDomain}/admin`;
+          : `https://${window.location.hostname}/dashboard/${result.website._id}`;
 
       setWebsiteUrl(website);
       setAdminUrl(admin);
