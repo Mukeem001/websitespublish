@@ -287,7 +287,9 @@ export const usePublish = (
         );
       } else {
         window.alert(
-          "DNS verification failed. Please update your DNS records and try again."
+          `DNS verification failed. ${
+            result?.reason || "Please update your DNS records and try again."
+          }`
         );
       }
     } catch (error: any) {

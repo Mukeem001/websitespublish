@@ -1,5 +1,6 @@
 import dns from "dns";
 import Domain from "./domain.model";
+import env from "../config/env";
 
 const resolver = dns.promises;
 
@@ -14,9 +15,20 @@ class DomainService {
     cnameHost?: string,
     cnameTarget?: string
   ) {
-    // Check existing domain
+    const normalizedDomain = domain.toLowerCase();
+    const normalizedHost =
+      cnameHost && cnameHost !== "@"
+        ? cnameHost.toLowerCase()
+        : "@";
+
+    const hostname =
+      normalizedHost === "@"
+        ? normalizedDomain
+        : `${normalizedHost}.${normalizedDomain}`;
+
+    // Prevent duplicate hostname records
     const exists = await Domain.findOne({
-      domain: domain.toLowerCase(),
+      hostname,
     });
 
     if (exists) {
@@ -28,14 +40,16 @@ class DomainService {
     const newDomain = await Domain.create({
       websiteId,
 
-      domain: domain.toLowerCase(),
+      domain: normalizedDomain,
+
+      hostname,
 
       type: "custom",
 
       cnameHost: cnameHost || "www",
 
       cnameTarget:
-        cnameTarget || "builder.buildhub.app",
+        cnameTarget || env.customDomainTarget,
 
       verificationStatus: "pending",
 
@@ -61,14 +75,14 @@ class DomainService {
     }
 
     const host =
-      domainRecord.cnameHost === "@" ||
+      domainRecord.hostname ||
+      (domainRecord.cnameHost === "@" ||
       !domainRecord.cnameHost
         ? domainRecord.domain
-        : `${domainRecord.cnameHost}.${domainRecord.domain}`;
+        : `${domainRecord.cnameHost}.${domainRecord.domain}`);
 
     const target =
-      domainRecord.cnameTarget ||
-      "builder.buildhub.app";
+      domainRecord.cnameTarget || env.customDomainTarget;
     let verified = false;
     let reason = "";
 
@@ -112,7 +126,7 @@ class DomainService {
     }
 
     domainRecord.verificationStatus =
-      verified ? "verified" : "pending";
+      verified ? "verified" : "failed";
     await domainRecord.save();
 
     return {
