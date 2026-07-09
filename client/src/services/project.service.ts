@@ -22,13 +22,16 @@ const mapWebsiteToProject = (
   const isDevelopment =
     window.location.hostname === "localhost";
 
+  const apiOrigin =
+    import.meta.env.VITE_API_URL
+      ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "")
+      : "http://localhost:5000";
+
   const websiteUrl = website.customDomain
     ? `https://${website.customDomain}`
     : website.domain
     ? `https://${website.domain}`
-    : isDevelopment
-    ? `http://localhost:5000/sites/${website.slug}`
-    : `https://${website.slug}.buildhub.app`;
+    : `${apiOrigin}/sites/${website.slug}`;
 
   const project: Project = {
     id: website._id || website.id,
@@ -43,9 +46,7 @@ const mapWebsiteToProject = (
     domain:
       website.customDomain ||
       website.domain ||
-      (isDevelopment
-        ? "localhost"
-        : "buildhub.app"),
+      `${apiOrigin}/sites/${website.slug}`,
 
     status:
       website.status === "published" ||
