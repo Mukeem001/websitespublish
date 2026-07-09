@@ -9,7 +9,7 @@ import path from "path";
 export const installDependencies = async (
   projectPath: string
 ) => {
-  await execa("npm", ["install"], {
+  await execa("npm", ["install", "--include=dev"], {
     cwd: projectPath,
     stdio: "inherit",
     shell: true,

@@ -20,6 +20,8 @@ import domainRoutes from "./domain/domain.routes";
 
 const app = express();
 
+app.set("trust proxy", true);
+
 /* ===========================
    Security
 =========================== */
