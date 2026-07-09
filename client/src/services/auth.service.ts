@@ -8,7 +8,7 @@ export interface User {
 }
 
 const SESSION_KEY = "buildhub_session";
-const API_URL = "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const handleResponse = async (response: Response) => {
   const data = await response.json().catch(() => null);

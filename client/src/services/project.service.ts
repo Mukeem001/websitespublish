@@ -2,7 +2,7 @@ import type { Project } from "../types/project";
 import { getCurrentUser } from "./auth.service";
 
 const STORAGE_KEY = "buildhub_projects";
-const API_URL = "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const formatTemplateName = (templateSlug?: string) => {
   if (!templateSlug) return "Custom Website";
