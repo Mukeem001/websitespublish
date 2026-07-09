@@ -19,9 +19,6 @@ const formatTemplateName = (templateSlug?: string) => {
 const mapWebsiteToProject = (
   website: any
 ): Project => {
-  const isDevelopment =
-    window.location.hostname === "localhost";
-
   const apiOrigin =
     import.meta.env.VITE_API_URL
       ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "")
