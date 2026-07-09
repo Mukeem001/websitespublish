@@ -28,19 +28,9 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || env.allowedOrigins.includes(origin)) {
-        callback(null, true);
-        return;
-      }
-
-      callback(
-        new Error(
-          `CORS policy: Origin ${origin} is not allowed`
-        )
-      );
-    },
+    origin: env.allowedOrigins,
     credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 
