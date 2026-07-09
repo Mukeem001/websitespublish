@@ -320,5 +320,6 @@ export const usePublish = (
     publish,
     reset,
     connectCustomDomain,
+    verifyCustomDomain,
   };
 };
