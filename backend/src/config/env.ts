@@ -1,0 +1,95 @@
+import dotenv from "dotenv";
+import * as path from "path";
+
+const envPath = path.resolve(__dirname, "../../.env");
+
+dotenv.config({ path: envPath });
+dotenv.config();
+
+const requiredEnv = [
+  "PORT",
+  "NODE_ENV",
+  "MONGODB_URI",
+  "JWT_SECRET",
+  "JWT_EXPIRES_IN",
+  "FRONTEND_URL",
+  "BACKEND_URL",
+] as const;
+
+for (const key of requiredEnv) {
+  if (!process.env[key]) {
+    throw new Error(
+      `Missing environment variable: ${key}`
+    );
+  }
+}
+
+export const env = {
+  nodeEnv: process.env.NODE_ENV!,
+
+  port: Number(process.env.PORT),
+
+  frontendUrl:
+    process.env.FRONTEND_URL!,
+
+  backendUrl:
+    process.env.BACKEND_URL!,
+
+  mongoUri:
+    process.env.MONGODB_URI!,
+
+  jwtSecret:
+    process.env.JWT_SECRET!,
+
+  jwtExpiresIn:
+    process.env.JWT_EXPIRES_IN!,
+
+  mail: {
+    host: process.env.MAIL_HOST,
+
+    port: Number(
+      process.env.MAIL_PORT
+    ),
+
+    secure:
+      process.env.MAIL_SECURE ===
+      "true",
+
+    user: process.env.MAIL_USER,
+
+    pass: process.env.MAIL_PASS,
+
+    from: process.env.MAIL_FROM,
+  },
+
+  cloudflare: {
+    token:
+      process.env
+        .CLOUDFLARE_API_TOKEN,
+
+    zoneId:
+      process.env
+        .CLOUDFLARE_ZONE_ID,
+  },
+
+  upload: {
+    maxFileSize: Number(
+      process.env.MAX_FILE_SIZE
+    ),
+  },
+
+  publish: {
+    defaultSubdomain:
+      process.env.DEFAULT_SUBDOMAIN,
+
+    root:
+      process.env.PUBLISH_ROOT,
+  },
+
+  admin: {
+    email:
+      process.env.ADMIN_EMAIL,
+  },
+};
+
+export default env;

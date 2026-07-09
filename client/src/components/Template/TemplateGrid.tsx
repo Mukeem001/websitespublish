@@ -1,0 +1,80 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import TemplateCard from "./TemplateCard";
+import { templates } from "../../data/templates";
+
+import PublishWebsiteModal from "../../components/publish/PublishWebsiteModal";
+
+interface Props {
+  search: string;
+  selectedCategory: string;
+}
+
+const TemplateGrid = ({ search, selectedCategory }: Props) => {
+  const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<any>(null);
+
+  const filteredTemplates = templates.filter((t) => {
+    return (
+      t.title.toLowerCase().includes(search.toLowerCase()) &&
+      (selectedCategory === "All" ||
+        t.category === selectedCategory)
+    );
+  });
+
+  return (
+    <section className="bg-slate-950 py-20">
+      <div className="mx-auto max-w-7xl px-5">
+
+        {filteredTemplates.length === 0 ? (
+          <div className="text-white text-center">
+            No Templates Found
+          </div>
+        ) : (
+          <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+
+            {filteredTemplates.map((template) => (
+              <TemplateCard
+                key={template.id}
+                {...template}
+                onFavorite={() =>
+                  console.log("Fav:", template.id)
+                }
+
+                onPreview={() =>
+                  navigate(`/templates/${template.slug}`)
+                }
+
+                onUse={() => {
+                  setSelectedTemplate(template);
+                  setShowModal(true);
+                }}
+              />
+            ))}
+
+          </div>
+        )}
+
+        {/* MODAL */}
+        {selectedTemplate && (
+          <PublishWebsiteModal
+            isOpen={showModal}
+            onClose={() => {
+              setShowModal(false);
+              setSelectedTemplate(null);
+            }}
+            templateId={selectedTemplate.id}
+            templateName={selectedTemplate.title}
+          />
+        )}
+
+      </div>
+    </section>
+  );
+};
+
+export default TemplateGrid;
